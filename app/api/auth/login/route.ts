@@ -33,11 +33,11 @@ export async function POST(req: Request) {
   const now = Date.now();
 
   // Limpa entradas expiradas periodicamente
-  for (const [key, record] of rateLimiter.entries()) {
+  Array.from(rateLimiter.entries()).forEach(([key, record]) => {
     if (record.blockedUntil > 0 && record.blockedUntil < now - RATE_LIMIT_WINDOW_MS) {
       rateLimiter.delete(key);
     }
-  }
+  });
 
   // Verifica bloqueio
   const record = rateLimiter.get(ip);
