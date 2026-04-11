@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Dock from "@/components/Shell/Dock";
-import TopBar from "@/components/Shell/TopBar";
-import StatusBar from "@/components/Shell/StatusBar";
+import ShellWrapper from "@/components/Shell/ShellWrapper";
 
 export const metadata: Metadata = {
   title: "INTELLBUSINESS — Mission Control",
@@ -13,27 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR">
       <body>
-        {/* Fixed TopBar */}
-        <TopBar />
-
-        {/* Fixed Dock */}
-        <Dock />
-
-        {/* Fixed StatusBar */}
-        <StatusBar />
-
-        {/* Content area offset by dock + topbar + statusbar */}
-        <main
-          style={{
-            marginLeft: "var(--dock-width)",
-            marginTop: "var(--topbar-height)",
-            paddingBottom: "var(--statusbar-height)",
-            minHeight: "calc(100vh - var(--topbar-height) - var(--statusbar-height))",
-            overflowY: "auto",
-          }}
-        >
-          {children}
-        </main>
+        <ShellWrapper>{children}</ShellWrapper>
       </body>
     </html>
   );
