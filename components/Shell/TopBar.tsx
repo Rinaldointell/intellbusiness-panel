@@ -1,11 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Bell, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Bell, Search, LogOut } from "lucide-react";
 
 export default function TopBar() {
+  const router = useRouter();
   const [time, setTime] = useState("");
   const [unread, setUnread] = useState(0);
+
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+  }
 
   useEffect(() => {
     const tick = () => {
@@ -141,6 +148,27 @@ export default function TopBar() {
         }}>
           IB
         </div>
+
+        {/* Logout */}
+        <button
+          onClick={handleLogout}
+          title="Sair"
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            color: "var(--text-muted)",
+            display: "flex",
+            alignItems: "center",
+            padding: "4px",
+            borderRadius: "6px",
+            transition: "color 0.15s",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--negative)")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
+        >
+          <LogOut size={15} />
+        </button>
       </div>
     </header>
   );
