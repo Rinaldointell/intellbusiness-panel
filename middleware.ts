@@ -43,7 +43,7 @@ async function verifyToken(token: string): Promise<boolean> {
     const sigBytes = hexToUint8Array(sigHex);
     if (sigBytes.length === 0) return false;
 
-    return await crypto.subtle.verify("HMAC", key, sigBytes, encoder.encode(payload));
+    return await crypto.subtle.verify("HMAC", key, new Uint8Array(sigBytes), encoder.encode(payload));
   } catch {
     return false;
   }
