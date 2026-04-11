@@ -1,0 +1,91 @@
+squad:
+  name: branding-design
+  description: Estratégia de marca, identidade visual e comportamento de conversão para a INTELLBUSINESS
+  version: 1.2.0
+  created_at: 2026-03-29
+  updated_at: 2026-03-30
+
+agents:
+  - id: brand-strategist
+    file: agents/brand-strategist.md
+    tier: 0
+    dna: Paul Rand + Wolff Olins
+    role: Guardião do Manifesto — fala primeiro, veto absoluto sobre DNA
+    status: active
+
+  - id: visual-designer
+    file: agents/visual-designer.md
+    tier: 1
+    dna: Peter Saville + Noma Bar
+    role: Criador — executa dentro do briefing aprovado
+    status: active
+
+  - id: ux-architect
+    file: agents/ux-architect.md
+    tier: 1
+    dna: Landor & Fitch + Pentagram
+    role: Validador de comportamento — veto funcional, intervém por último
+    status: active
+
+tasks:
+  - file: tasks/briefing-workflow.md
+    agent: brand-strategist
+    command: '*briefing'
+
+  - file: tasks/arbitrar-workflow.md
+    agent: brand-strategist
+    command: '*arbitrar'
+
+  - file: tasks/validar-dna-workflow.md
+    agent: brand-strategist
+    command: '*validar-dna'
+
+  - file: tasks/criar-workflow.md
+    agent: visual-designer
+    command: '*criar'
+
+  - file: tasks/declarar-intencao-workflow.md
+    agent: visual-designer
+    command: '*declarar-intencao'
+
+  - file: tasks/disputar-workflow.md
+    agent: visual-designer
+    command: '*disputar'
+
+  - file: tasks/validar-workflow.md
+    agent: ux-architect
+    command: '*validar'
+
+  - file: tasks/disputar-ux-workflow.md
+    agent: ux-architect
+    command: '*disputar'
+
+  - file: tasks/audit-consistencia-workflow.md
+    agent: ux-architect
+    command: '*audit-consistencia'
+
+templates:
+  - file: templates/briefing-lean-tmpl.md
+    agent: brand-strategist
+    mode: lean
+  - file: templates/briefing-estendido-tmpl.md
+    agent: brand-strategist
+    mode: extended
+  - file: templates/declaracao-intencao-lean-tmpl.md
+    agent: visual-designer
+  - file: templates/declaracao-intencao-estendido-tmpl.md
+    agent: visual-designer
+  - file: templates/relatorio-validacao-lean-tmpl.md
+    agent: ux-architect
+  - file: templates/relatorio-validacao-estendido-tmpl.md
+    agent: ux-architect
+
+checklists:
+  - file: checklists/brand-strategist-quality-gate.md
+    agent: brand-strategist
+  - file: checklists/visual-designer-quality-gate.md
+    agent: visual-designer
+  - file: checklists/ux-architect-quality-gate.md
+    agent: ux-architect
+
+workflows: []

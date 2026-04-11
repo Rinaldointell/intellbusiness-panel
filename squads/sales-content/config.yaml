@@ -1,0 +1,31 @@
+squad:
+  name: sales-content
+  description: Propostas comerciais, scripts de vendas e landing pages de portfólio da INTELLBUSINESS
+  version: 1.0.0
+  role: execution
+  created_at: 2026-04-09
+
+parent_squad: intellbusiness-hub
+upstream: branding-design
+downstream: whatsapp-agents
+
+agents:
+  - id: copywriter
+    file: agents/copywriter.md
+    status: active
+    role: Copy de vendas B2B
+
+  - id: proposal-writer
+    file: agents/proposal-writer.md
+    status: active
+    role: Propostas comerciais
+
+tasks: []
+
+templates:
+  - file: templates/proposta-comercial.md
+    description: Proposta para venda de agentes WhatsApp
+  - file: templates/case-study.md
+    description: Case de portfólio
+
+checklists: []

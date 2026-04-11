@@ -1,0 +1,65 @@
+squad:
+  name: intellbusiness-hub
+  description: Painel de controle central da INTELLBUSINESS — orquestra todos os squads filhos
+  version: 1.0.0
+  role: master
+  created_at: 2026-04-09
+
+hierarchy:
+  coordinator: product-strategy
+  chain:
+    - branding-design
+    - sales-content
+    - whatsapp-agents
+  topology: |
+    product-strategy
+        ├── branding-design
+        │       └── sales-content
+        │               └── whatsapp-agents
+        └── (coordena todos)
+
+squads:
+  - id: branding-design
+    path: ../branding-design
+    status: active
+    role: upstream
+    description: Estratégia de marca e identidade visual
+
+  - id: sales-content
+    path: ../sales-content
+    status: pending
+    role: downstream-of:branding-design
+    description: Propostas, scripts, landing pages de portfólio
+
+  - id: whatsapp-agents
+    path: ../whatsapp-agents
+    status: pending
+    role: downstream-of:sales-content
+    description: Prompts, arquitetura e docs das IAs (Isabella, Sarah Lynn, Samantha)
+
+  - id: product-strategy
+    path: ../product-strategy
+    status: pending
+    role: coordinator
+    description: Roadmap de produtos, especialmente Samantha como SaaS
+
+commands:
+  - name: status
+    description: Exibe status de todos os squads
+    syntax: '*status'
+
+  - name: activate
+    description: Ativa um squad filho pelo id
+    syntax: '*activate {squad-id}'
+
+  - name: brief
+    description: Envia briefing/comando para um squad filho
+    syntax: '*brief {squad-id} {mensagem}'
+
+  - name: chain
+    description: Executa fluxo hierárquico branding → sales → whatsapp
+    syntax: '*chain {objetivo}'
+
+  - name: coordinate
+    description: Aciona product-strategy para coordenação cross-squad
+    syntax: '*coordinate {topico}'

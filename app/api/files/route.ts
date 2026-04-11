@@ -4,15 +4,13 @@ import fs from "fs";
 export const dynamic = "force-dynamic";
 import path from "path";
 
-const ROOT_DIR = path.resolve(process.cwd(), "..");
+const ROOT_DIR = process.env.FILES_ROOT_DIR ?? path.resolve(process.cwd());
 
 const ALLOWED_DIRS = [
   "squads",
-  "intellbusiness-panel/data",
-  "intellbusiness-panel/app",
-  "intellbusiness-panel/components",
-  ".aiox-core/development",
-  ".claude",
+  "data",
+  "app",
+  "components",
 ];
 
 const BLOCKED_PATTERNS = [

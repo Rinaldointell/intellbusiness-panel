@@ -1,0 +1,22 @@
+squad:
+  name: product-strategy
+  description: Roadmap de produtos da INTELLBUSINESS — coordena todos os squads, foco em Samantha como SaaS
+  version: 1.0.0
+  role: coordinator
+  created_at: 2026-04-09
+
+parent_squad: intellbusiness-hub
+coordinates:
+  - branding-design
+  - sales-content
+  - whatsapp-agents
+
+focus:
+  - id: samantha-saas
+    description: Evolução de Samantha de IA interna para produto SaaS
+    status: ideation
+
+agents: []
+tasks: []
+templates: []
+checklists: []

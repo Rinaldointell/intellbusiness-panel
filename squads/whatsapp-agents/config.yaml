@@ -1,0 +1,32 @@
+squad:
+  name: whatsapp-agents
+  description: Prompts, arquitetura e documentação das IAs de atendimento WhatsApp da INTELLBUSINESS
+  version: 1.0.0
+  role: execution
+  created_at: 2026-04-09
+
+parent_squad: intellbusiness-hub
+upstream: sales-content
+
+agents:
+  - id: isabella
+    file: agents/isabella.md
+    status: active
+    client: PLASTLAMI
+    role: Atendimento WhatsApp — embalagens
+
+  - id: sarah-lynn
+    file: agents/sarah-lynn.md
+    status: active
+    client: INTELLBUSINESS
+    role: Qualificação de leads
+
+  - id: samantha
+    file: agents/samantha.md
+    status: active
+    client: Clínicas odontológicas
+    role: Agendamento e gestão de consultas — SaaS core
+
+tasks: []
+templates: []
+checklists: []

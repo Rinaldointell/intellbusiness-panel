@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import yaml from "js-yaml";
 
-const SQUADS_DIR = path.resolve(process.cwd(), "../squads");
+const SQUADS_DIR = process.env.SQUADS_DIR ?? path.resolve(process.cwd(), "squads");
 
 interface AgentRaw {
   id: string;

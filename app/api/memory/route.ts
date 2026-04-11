@@ -4,9 +4,9 @@ import fs from "fs";
 export const dynamic = "force-dynamic";
 import path from "path";
 
-const SQUADS_DIR = path.resolve(process.cwd(), "../squads");
-const CLAUDE_MEMORY_DIR = path.resolve(process.cwd(), "../.claude/projects");
-const AIOX_MEMORY_DIR = path.resolve(process.cwd(), "../.aiox-core/data");
+const SQUADS_DIR = process.env.SQUADS_DIR ?? path.resolve(process.cwd(), "squads");
+const CLAUDE_MEMORY_DIR = process.env.CLAUDE_MEMORY_DIR ?? path.resolve(process.cwd(), "../.claude/projects");
+const AIOX_MEMORY_DIR = process.env.AIOX_MEMORY_DIR ?? path.resolve(process.cwd(), "../.aiox-core/data");
 
 function readMarkdownFiles(dir: string, prefix = ""): object[] {
   const results: object[] = [];
