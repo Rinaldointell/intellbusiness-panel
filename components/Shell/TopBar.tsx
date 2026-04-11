@@ -42,7 +42,7 @@ export default function TopBar() {
     }}>
       {/* Left — Logo */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <img src="/logo.png" height={20} style={{ objectFit: "contain", maxWidth: "120px" }} alt="INTELLBUSINESS" />
+        <img src="/logo.png" alt="INTELLBUSINESS" style={{ height: "22px", width: "auto", objectFit: "contain", display: "block" }} />
         <span style={{
           fontSize: "10px",
           fontFamily: "var(--font-mono)",
