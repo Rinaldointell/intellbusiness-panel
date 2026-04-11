@@ -1,0 +1,74 @@
+[
+  {
+    "id": "notif-001",
+    "timestamp": "2026-04-11T10:32:00Z",
+    "type": "success",
+    "title": "Deploy Concluído",
+    "message": "Versão v1.4.2 publicada em produção com sucesso",
+    "read": false,
+    "agent": "devops"
+  },
+  {
+    "id": "notif-002",
+    "timestamp": "2026-04-11T10:15:00Z",
+    "type": "info",
+    "title": "QA Gate Aprovado",
+    "message": "Story 3.2 passou em todos os critérios de qualidade",
+    "read": false,
+    "agent": "qa"
+  },
+  {
+    "id": "notif-003",
+    "timestamp": "2026-04-11T09:58:00Z",
+    "type": "warning",
+    "title": "Token Usage Alto",
+    "message": "Agente brand-strategist consumiu 85% do limite diário",
+    "read": false,
+    "agent": "brand-strategist"
+  },
+  {
+    "id": "notif-004",
+    "timestamp": "2026-04-11T09:30:00Z",
+    "type": "info",
+    "title": "Nova Epic Criada",
+    "message": "Epic: Integração WhatsApp Business API adicionada ao backlog",
+    "read": true,
+    "agent": "pm"
+  },
+  {
+    "id": "notif-005",
+    "timestamp": "2026-04-11T08:50:00Z",
+    "type": "success",
+    "title": "Migration Aplicada",
+    "message": "Tabela user_sessions criada no Supabase com sucesso",
+    "read": true,
+    "agent": "data-engineer"
+  },
+  {
+    "id": "notif-006",
+    "timestamp": "2026-04-11T08:00:00Z",
+    "type": "info",
+    "title": "Relatório Diário Gerado",
+    "message": "Relatório de atividade de 10/04/2026 disponível para revisão",
+    "read": true,
+    "agent": "analyst"
+  },
+  {
+    "id": "notif-007",
+    "timestamp": "2026-04-10T22:00:00Z",
+    "type": "error",
+    "title": "Falha no Cron Job",
+    "message": "LinkedIn Content Scheduler falhou — token de autenticação expirado",
+    "read": true,
+    "agent": "content-writer"
+  },
+  {
+    "id": "notif-008",
+    "timestamp": "2026-04-10T20:00:00Z",
+    "type": "success",
+    "title": "Backup Concluído",
+    "message": "Backup diário de memórias concluído — 47 arquivos salvos",
+    "read": true,
+    "agent": "devops"
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "act-001",
+    "timestamp": "2026-04-11T10:32:00Z",
+    "agent": "brand-strategist",
+    "squad": "branding-design",
+    "type": "task_completed",
+    "message": "Briefing de marca para Q2 2026 concluído",
+    "icon": "✅"
+  },
+  {
+    "id": "act-002",
+    "timestamp": "2026-04-11T10:15:00Z",
+    "agent": "visual-designer",
+    "squad": "branding-design",
+    "type": "file_created",
+    "message": "Criado template de declaração de intenção v2",
+    "icon": "📄"
+  },
+  {
+    "id": "act-003",
+    "timestamp": "2026-04-11T09:58:00Z",
+    "agent": "dev",
+    "squad": "intellbusiness-hub",
+    "type": "code_push",
+    "message": "Implementação do módulo de autenticação Supabase",
+    "icon": "🚀"
+  },
+  {
+    "id": "act-004",
+    "timestamp": "2026-04-11T09:44:00Z",
+    "agent": "analyst",
+    "squad": "product-strategy",
+    "type": "research",
+    "message": "Análise competitiva de mercado SaaS B2B concluída",
+    "icon": "🔍"
+  },
+  {
+    "id": "act-005",
+    "timestamp": "2026-04-11T09:30:00Z",
+    "agent": "qa",
+    "squad": "intellbusiness-hub",
+    "type": "review",
+    "message": "QA Gate aprovado: Story 3.2 — Dashboard de métricas",
+    "icon": "🧪"
+  },
+  {
+    "id": "act-006",
+    "timestamp": "2026-04-11T09:15:00Z",
+    "agent": "pm",
+    "squad": "product-strategy",
+    "type": "planning",
+    "message": "Epic criada: Integração WhatsApp Business API",
+    "icon": "📋"
+  },
+  {
+    "id": "act-007",
+    "timestamp": "2026-04-11T08:50:00Z",
+    "agent": "architect",
+    "squad": "intellbusiness-hub",
+    "type": "design",
+    "message": "Arquitetura de microserviços revisada e aprovada",
+    "icon": "🏗️"
+  },
+  {
+    "id": "act-008",
+    "timestamp": "2026-04-11T08:30:00Z",
+    "agent": "whatsapp-bot",
+    "squad": "whatsapp-agents",
+    "type": "message",
+    "message": "43 mensagens processadas no canal de suporte",
+    "icon": "💬"
+  },
+  {
+    "id": "act-009",
+    "timestamp": "2026-04-11T08:10:00Z",
+    "agent": "content-writer",
+    "squad": "sales-content",
+    "type": "content",
+    "message": "3 posts de LinkedIn redigidos para aprovação",
+    "icon": "✍️"
+  },
+  {
+    "id": "act-010",
+    "timestamp": "2026-04-11T07:55:00Z",
+    "agent": "devops",
+    "squad": "intellbusiness-hub",
+    "type": "deploy",
+    "message": "Deploy em produção realizado com sucesso — v1.4.2",
+    "icon": "🟢"
+  },
+  {
+    "id": "act-011",
+    "timestamp": "2026-04-10T22:00:00Z",
+    "agent": "data-engineer",
+    "squad": "intellbusiness-hub",
+    "type": "migration",
+    "message": "Migration Supabase aplicada: tabela user_sessions",
+    "icon": "🗃️"
+  },
+  {
+    "id": "act-012",
+    "timestamp": "2026-04-10T20:30:00Z",
+    "agent": "ux-architect",
+    "squad": "branding-design",
+    "type": "review",
+    "message": "Auditoria de consistência visual aprovada",
+    "icon": "🎨"
+  }
+]
