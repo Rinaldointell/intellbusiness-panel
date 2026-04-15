@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { StatsCard } from "@/components/StatsCard";
+import { supabase } from "@/lib/supabase";
 import SectionHeader from "@/components/Shell/SectionHeader";
 import {
   Activity,
@@ -71,8 +72,36 @@ export default function DashboardPage() {
   const [activity, setActivity]     = useState<ActivityEntry[]>([]);
   const [agents,   setAgents]       = useState<AgentData[]>([]);
   const [squads,   setSquads]       = useState<Squad[]>([]);
+  const [agentStatuses, setAgentStatuses] = useState<Record<string, {
+    status: string
+    current_task: string | null
+    executions_today: number
+  }>>({})
+  const [n8nMonitor, setN8nMonitor] = useState<{
+    status: string
+    error_count: number
+    last_check: string | null
+  }>({ status: 'ok', error_count: 0, last_check: null })
+
+  const fetchSupabaseData = async () => {
+    try {
+      const [{ data: agentsData }, { data: monitorData }] = await Promise.all([
+        supabase.from('agents').select('id, status, current_task, executions_today'),
+        supabase.from('monitors').select('status, error_count, last_check').eq('id', 'n8n_errors').single(),
+      ])
+      if (agentsData) {
+        const map: Record<string, any> = {}
+        agentsData.forEach((a: any) => { map[a.id] = a })
+        setAgentStatuses(map)
+      }
+      if (monitorData) setN8nMonitor(monitorData)
+    } catch (e) {
+      console.error('Supabase fetch error:', e)
+    }
+  }
 
   useEffect(() => {
+    // ── Carga inicial ────────────────────────────────────────────────────────
     Promise.all([
       fetch("/api/activity").then((r) => r.json()),
       fetch("/api/agents").then((r) => r.json()),
@@ -82,6 +111,68 @@ export default function DashboardPage() {
       setAgents(ag);
       setSquads(sq);
     }).catch(console.error);
+
+    fetchSupabaseData()
+
+    // ── Realtime: tabela agents ──────────────────────────────────────────────
+    const agentsChannel = supabase
+      .channel('dashboard-agents-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'agents' },
+        (payload) => {
+          if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+            const row = payload.new as any
+            setAgentStatuses((prev) => ({
+              ...prev,
+              [row.id]: {
+                status: row.status,
+                current_task: row.current_task,
+                executions_today: row.executions_today,
+              },
+            }))
+          }
+        }
+      )
+      .subscribe()
+
+    // ── Realtime: tabela activities ──────────────────────────────────────────
+    const activitiesChannel = supabase
+      .channel('dashboard-activities-realtime')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'activities' },
+        (payload) => {
+          const row = payload.new as any
+          const newEntry: ActivityEntry = {
+            id: String(row.id),
+            timestamp: row.timestamp,
+            agent: row.agent,
+            squad: row.squad ?? '',
+            type: row.type,
+            message: row.message,
+            icon: row.icon ?? '⚙️',
+          }
+          setActivity((prev) => [newEntry, ...prev].slice(0, 200))
+        }
+      )
+      .subscribe()
+
+    // ── Fallback polling para monitors (n8n errors) — 60s ───────────────────
+    const monitorsInterval = setInterval(async () => {
+      const { data } = await supabase
+        .from('monitors')
+        .select('status, error_count, last_check')
+        .eq('id', 'n8n_errors')
+        .single()
+      if (data) setN8nMonitor(data)
+    }, 60000)
+
+    return () => {
+      supabase.removeChannel(agentsChannel)
+      supabase.removeChannel(activitiesChannel)
+      clearInterval(monitorsInterval)
+    }
   }, []);
 
   const stats = {
@@ -124,7 +215,7 @@ export default function DashboardPage() {
         <StatsCard title="Total Atividades" value={stats.total} icon={<Activity size={18} />} iconColor="var(--info)" />
         <StatsCard title="Hoje"             value={stats.today} icon={<Zap size={18} />}      iconColor="var(--accent)" />
         <StatsCard title="Bem-sucedidos"    value={stats.success} icon={<CheckCircle size={18} />} iconColor="var(--positive)" />
-        <StatsCard title="Erros"            value={stats.errors}  icon={<XCircle size={18} />}     iconColor="var(--negative)" />
+        <StatsCard title="Erros n8n" value={n8nMonitor.error_count} icon={<XCircle size={18} />} iconColor={n8nMonitor.status === 'alert' ? '#ef4444' : 'var(--negative)'} />
       </div>
 
       {/* Multi-Agent System */}
@@ -145,7 +236,11 @@ export default function DashboardPage() {
             }}>
               {agents.map((agent) => {
                 const color = SQUAD_COLORS[agent.squad] ?? "#6B7280";
-                const online = agent.status === "active";
+                const supaStatus = agentStatuses[agent.id]
+                const online = supaStatus
+                  ? supaStatus.status === 'busy' || supaStatus.status === 'idle'
+                  : agent.status === 'active'
+                const isBusy = supaStatus?.status === 'busy'
                 return (
                   <div
                     key={`${agent.squad}-${agent.id}`}
@@ -166,7 +261,10 @@ export default function DashboardPage() {
                       </div>
                       <Circle
                         size={8}
-                        style={{ fill: online ? "#4ade80" : "#6b7280", color: online ? "#4ade80" : "#6b7280" }}
+                        style={{
+                          fill: isBusy ? '#F5A800' : online ? '#4ade80' : '#6b7280',
+                          color: isBusy ? '#F5A800' : online ? '#4ade80' : '#6b7280',
+                        }}
                       />
                     </div>
                     <div style={{

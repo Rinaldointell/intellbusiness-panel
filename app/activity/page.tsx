@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Activity } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 interface Entry { id: string; timestamp: string; agent: string; squad: string; type: string; message: string; icon: string; }
 
@@ -33,7 +34,34 @@ export default function ActivityPage() {
   const [items,  setItems]  = useState<Entry[]>([]);
   const [filter, setFilter] = useState("all");
 
-  useEffect(() => { fetch("/api/activity").then((r) => r.json()).then(setItems).catch(() => {}); }, []);
+  useEffect(() => {
+    // Carga inicial: dados históricos do arquivo JSON
+    fetch("/api/activity").then((r) => r.json()).then(setItems).catch(() => {});
+
+    // Realtime: novas atividades vindas do n8n via Supabase
+    const channel = supabase
+      .channel('activity-page-realtime')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'activities' },
+        (payload) => {
+          const row = payload.new as any;
+          const newEntry: Entry = {
+            id: String(row.id),
+            timestamp: row.timestamp,
+            agent: row.agent,
+            squad: row.squad ?? '',
+            type: row.type,
+            message: row.message,
+            icon: row.icon ?? '⚙️',
+          };
+          setItems((prev) => [newEntry, ...prev].slice(0, 200));
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, []);
 
   const types    = Array.from(new Set(items.map((i) => i.type)));
   const filtered = filter === "all" ? items : items.filter((i) => i.type === filter);

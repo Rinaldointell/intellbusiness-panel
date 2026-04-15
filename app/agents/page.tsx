@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Bot, Search, Circle } from "lucide-react";
 import SectionHeader from "@/components/Shell/SectionHeader";
+import { supabase } from "@/lib/supabase";
 
 interface Agent {
   id: string;
@@ -21,13 +22,43 @@ const SQUAD_COLORS: Record<string, string> = {
 };
 
 export default function AgentsPage() {
-  const [agents,     setAgents]     = useState<Agent[]>([]);
-  const [loading,    setLoading]    = useState(true);
-  const [search,     setSearch]     = useState("");
-  const [filterSquad, setFilter]   = useState("all");
+  const [agents,      setAgents]    = useState<Agent[]>([]);
+  const [loading,     setLoading]   = useState(true);
+  const [search,      setSearch]    = useState("");
+  const [filterSquad, setFilter]    = useState("all");
+  const [agentStatuses, setAgentStatuses] = useState<Record<string, { status: string }>>({});
 
   useEffect(() => {
     fetch("/api/agents").then((r) => r.json()).then((d) => { setAgents(d); setLoading(false); }).catch(() => setLoading(false));
+
+    // Carga inicial dos status
+    supabase.from('agents').select('id, status').then(({ data }) => {
+      if (data) {
+        const map: Record<string, { status: string }> = {};
+        data.forEach((a) => { map[a.id] = a; });
+        setAgentStatuses(map);
+      }
+    });
+
+    // Realtime: atualiza status instantaneamente sem polling
+    const channel = supabase
+      .channel('agents-page-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'agents' },
+        (payload) => {
+          if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+            const row = payload.new as { id: string; status: string };
+            setAgentStatuses((prev) => ({
+              ...prev,
+              [row.id]: { status: row.status },
+            }));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
   }, []);
 
   const squads  = Array.from(new Set(agents.map((a) => a.squad)));
@@ -93,7 +124,11 @@ export default function AgentsPage() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "12px" }}>
           {filtered.map((agent) => {
             const color = SQUAD_COLORS[agent.squad] ?? "#6B7280";
-            const online = agent.status === "active";
+            const supaStatus = agentStatuses[agent.id];
+            const online = supaStatus
+              ? supaStatus.status === 'busy' || supaStatus.status === 'idle'
+              : agent.status === 'active';
+            const isBusy = supaStatus?.status === 'busy';
             return (
               <div
                 key={`${agent.squad}-${agent.id}`}
@@ -118,9 +153,9 @@ export default function AgentsPage() {
                     <Bot size={16} style={{ color }} />
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                    <Circle size={7} style={{ fill: online ? "#4ade80" : "#6b7280", color: online ? "#4ade80" : "#6b7280" }} />
-                    <span style={{ fontSize: "10px", fontFamily: "var(--font-mono)", color: online ? "var(--positive)" : "var(--text-muted)" }}>
-                      {online ? "ativo" : "inativo"}
+                    <Circle size={7} style={{ fill: isBusy ? '#F5A800' : online ? '#4ade80' : '#6b7280', color: isBusy ? '#F5A800' : online ? '#4ade80' : '#6b7280' }} />
+                    <span style={{ fontSize: "10px", fontFamily: "var(--font-mono)", color: isBusy ? '#F5A800' : online ? "var(--positive)" : "var(--text-muted)" }}>
+                      {isBusy ? "ocupada" : online ? "ativo" : "inativo"}
                     </span>
                   </div>
                 </div>

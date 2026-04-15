@@ -14,11 +14,13 @@ import {
   Users,
   Search,
   Settings,
+  Building2,
 } from "lucide-react";
 
 const NAV_ITEMS = [
   { href: "/",             icon: LayoutDashboard, label: "Dashboard"   },
   { href: "/agents",       icon: Bot,             label: "Agents"      },
+  { href: "/office",       icon: Building2,       label: "Office 3D"   },
   { href: "/squads",       icon: Users,           label: "Squads"      },
   { href: "/system",       icon: Monitor,         label: "System"      },
   { href: "/activity",     icon: Activity,        label: "Activity"    },
