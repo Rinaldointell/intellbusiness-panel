@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
-import { Text, Box, Sphere } from "@react-three/drei";
+import { Text, Box, RoundedBox, Sphere } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import type { Mesh } from "three";
 import type { AgentConfig } from "./agentsConfig";
@@ -41,15 +41,16 @@ export function AgentDesk({ agent, status }: Props) {
   return (
     <group position={[x, 0, z]}>
       {/* ── Desk surface ───────────────────────────────────── */}
-      <Box
+      <RoundedBox
         args={[1.8, 0.07, 1]}
         radius={0.04}
+        smoothness={4}
         position={[0, 0.76, 0]}
         onPointerEnter={() => { setHovered(true);  document.body.style.cursor = "pointer"; }}
         onPointerLeave={() => { setHovered(false); document.body.style.cursor = "auto";    }}
       >
         <meshStandardMaterial color={hovered ? "#252540" : "#1a1a30"} roughness={0.3} metalness={0.2} />
-      </Box>
+      </RoundedBox>
 
       {/* ── Desk legs ──────────────────────────────────────── */}
       {([ [-0.82, -0.42], [0.82, -0.42], [-0.82, 0.42], [0.82, 0.42] ] as [number,number][]).map(([lx, lz], i) => (
@@ -76,13 +77,13 @@ export function AgentDesk({ agent, status }: Props) {
       </Box>
 
       {/* ── Chair seat ─────────────────────────────────────── */}
-      <Box args={[0.72, 0.07, 0.72]} radius={0.03} position={[0, 0.45, 0.85]}>
+      <RoundedBox args={[0.72, 0.07, 0.72]} radius={0.03} smoothness={4} position={[0, 0.45, 0.85]}>
         <meshStandardMaterial color={`${agent.color}22`} />
-      </Box>
+      </RoundedBox>
       {/* Chair back */}
-      <Box args={[0.7, 0.55, 0.06]} radius={0.03} position={[0, 0.75, 1.17]}>
+      <RoundedBox args={[0.7, 0.55, 0.06]} radius={0.03} smoothness={4} position={[0, 0.75, 1.17]}>
         <meshStandardMaterial color={`${agent.color}22`} />
-      </Box>
+      </RoundedBox>
 
       {/* ── Status indicator (pulsing sphere) ──────────────── */}
       <Sphere ref={indicatorRef} args={[0.09, 16, 16]} position={[0.82, 1.55, 0]}>
